@@ -43,15 +43,8 @@ export function OrderList({id}) {
   const [filterValue, setFilterValue] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [customers, setCustomers] = useState([]);
-  // console.log({customers});
-
-
-  // For Orders
-
+ 
   const [orders, setOrders] = useState([]);
-
-// console.log({orders});
-  // For filtering
   const [showFilter, setShowFilter] = useState(false);
 
   const toastMarkup = toastProps.content && (
@@ -63,24 +56,14 @@ export function OrderList({id}) {
     plural: "order",
   };
 
-
-
 const fetchOrders = async () => {
-    // setIsLoading(true);
     const response = await fetch("/api/orders");
     const order = await response.json();
-
     if(response.ok) {
         setOrders(order.orderData.orders);
     }
 
   };
-
-
-const Aa = (id) => {
-  console.log("AAA", id);
-}
-
 
   useEffect(() => {
     fetchOrders()
@@ -94,45 +77,11 @@ const Aa = (id) => {
     useIndexResourceState(orders,{
         resourceIDResolver,
       });
+
   /* Function for update Customers data */
-
-
   function onDelete(items) {
     handleSelectionChange("all", false); 
   }
-
-
-//   const updateCustomers = async () => {
-//     setIsLoading(true);
-//     var days = [];
-//     const tempData = selectedResources.map((newStr) => {
-//       var id = newStr.substring(newStr.lastIndexOf("/") + 1);
-//       days.push(id);
-//     });
-
-//     console.log({ days });
-//     const response = await fetch(`/api/bulk-update-customers?ids=${days}`);
-//     const resData = await response.json();
-//     if (resData.bulkUpdateCustomers.length < 0) {
-//       <Spinner accessibilityLabel="Spinner example" size="large" />;
-//     } else {
-//       if (response.ok) {
-//         // alert('Hii');
-//         setUpdatedCustomer(resData.bulkUpdateCustomers);
-//         const updatedData = resData.bulkUpdateCustomers.map((node) => {
-//           return node;
-//         });
-//         toggleActive(days.length);
-//         onDelete(days);
-//         setToastProps({ content: "Bulk!" });
-//         await refetchProductCount();
-//         setCustomers(data);
-//         //  redirect.dispatch(Redirect.Action.APP, `/`);
-//       }
-//     }
-//   };
-
- 
 
   const rowMarkup = orders.map(({node}, index) => (
     <IndexTable.Row
@@ -169,18 +118,6 @@ const Aa = (id) => {
     },
   ];
 
-//   const handleFilter = () => {
-//     // alert('Hiii');
-//     return (
-//       <TextField
-//         label="Store name"
-//         value={value}
-//         onChange={handleChange}
-//         autoComplete="off"
-//       />
-//     );
-//   };
-
   const mainIndex = (
     <IndexTable
       resourceName={resourceName}
@@ -201,7 +138,6 @@ const Aa = (id) => {
         {title: "Delivery method"},
         { title: "Tags" }
       ]}
-    //   bulkActions={bulkActions}
       promotedBulkActions={promotedBulkActions}
     >
     {rowMarkup}
@@ -211,36 +147,8 @@ const Aa = (id) => {
   return (
     <Card>
       <Frame>
-        {/* <input 
-           value={value}
-           onChange={handleChange} 
-           autoComplete="off"
-           style={{minHeight: "2.25rem", width: "60%", margin: '10px', borderRadius:'5px',  background: "none",
-           outline: 'none', padding: '5px', align:"right"}} 
-           name="value" id="value" 
-          /> 
-          <Button onClick={searchData} style={{ backgroundColor: 'red !important' }}>Search</Button>
-          <Button style={{ backgroundColor: 'red' }} onClick={handleClick}>Tagged with<img width="20%" height="20px" src={downArrow}/></Button>
-            {showFilter && (
-                <Grid>
-                  <Grid.Cell columnSpan={{xs: 6, sm: 3 , md: 4, lg: 6, xl: 6}}>
-                    <Card sectioned>
-                      <input style={{minHeight: "2.25rem", width: "100%", padding: '5px'}} value={filterValue}   name="filterValue" id="filterValue" onChange={handleFilterChange} /><br /> <br />
-                      <Button onClick={filterData} >Filter</Button> 
-                    </Card>
-                  </Grid.Cell>
-                </Grid>
-            )} */}
-
         {toastMarkup}
-        
         {mainIndex}
-
-        {/* {isFilter && filterValue != "" && filterCustomer.length == 0 ? (
-          <CustomersNotFound />
-        ) : (
-          mainIndex
-        )} */}
       </Frame>
     </Card>
   );

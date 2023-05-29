@@ -117,8 +117,6 @@ const formalGqlResponse = (res) => {
   const orderCount = edges.map(({ node }) => ({
     order: parseInt(node.numberOfOrders),
   }));
-
-  console.log("Page Info =>", res.body.data.customers.pageInfo);
   return {
     customers: res?.body?.data.customers.edges,
     cutomersPageInfo: res?.body?.data.customers.pageInfo,
@@ -160,10 +158,6 @@ const fetchNextCustomerResponse = (res) => {
 };
 export async function fetchNextCutomers({ session, first, after }) {
   const client = new shopify.api.clients.Graphql({ session });
-
-  // customers(first:${first}, after:\"${after}\") {
-  // customers($first:int, $after:string) {
-  //   customers(first:$first, after:$after) {
   const FETCH_NEXT_CUSTOMER_QUERY = `
 {
       customers(first:${first}, after:\"${after}\") {
@@ -231,7 +225,6 @@ const fetchPreviousCustomersResponse = (res) => {
 
 export async function fetchPreviousCustomers({ session, last, before }) {
   const client = new shopify.api.clients.Graphql({ session });
-
   const FETCH_PREVIOUS_CUSTOMER_QUERY = `{
       customers(last:${last}, before: \"${before}"\) {
          edges {
@@ -307,12 +300,6 @@ const fechSearchCustomersResponse = (res) => {
  * @returns fechSearchCustomersResponse(res);
  */
 export async function searchCustomers({ session, search }) {
-
-  // customers(first:200, query: "firstName:'${search}' email:'${search}' tag:'${search}' ") {
-  // customers(first:200, query:"email:'${search}'") {
-  // customers(first:200, filter: { "email: '${search}'" }) {
-  // customers(filter: { search: "Jack" }) {
-
   const SEARCH_CUSTOMERS_QUERY = `
 {
   customers(first:50, query: "email:*${search}*") {
@@ -348,8 +335,6 @@ export async function searchCustomers({ session, search }) {
 
   const client = new shopify.api.clients.Graphql({ session });
   try {
-    // await new Promise((resolve) => setTimeout(resolve, 500));
-
     const res = await client.query({
       data: {
         query: SEARCH_CUSTOMERS_QUERY,
@@ -368,13 +353,10 @@ export async function searchCustomers({ session, search }) {
 }
 
 /**
- * Fetch Filter Customer Data
+ * Fetch Filter Customer Data by Tags
  * Date: 22/05/2023
  * Aman Solanki
  */
-
-// Function for filter the data by Tags
-
 const fetchFilterCustomersResponse = (res) => {
   const edges = res?.body?.data?.customers?.edges || [];
   const orderCount = edges.map(({ node }) => ({

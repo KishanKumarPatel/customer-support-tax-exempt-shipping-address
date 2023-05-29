@@ -17,8 +17,7 @@ export default function CustOrder() {
       <TitleBar title="Customer Order List" primaryAction={null} />
       <Layout>
         <Layout.Section>
-          <CustomerOrder customerId={id}/>
-          {/* <Skeleton /> */}
+          <CustomerOrder customerId={id} />
         </Layout.Section>
       </Layout>
     </Page>

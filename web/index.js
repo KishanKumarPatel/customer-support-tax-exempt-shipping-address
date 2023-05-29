@@ -44,28 +44,6 @@ app.post(
   shopify.processWebhooks({ webhookHandlers: GDPRWebhookHandlers })
 );
 
-// Shopify.Webhooks.Registry.addHandler("APP_UNINSTALLED", {
-//   path: "/api/webhooks",
-//   webhookHandler: async (_topic, shop, _body) => {
-//     await AppInstallations.delete(shop);
-//   },
-// });
-
-// Create an instance of WebhookRegistry
-// const webhookRegistry = new WebhookRegistry();
-
-// // Register the "APP_UNINSTALLED" webhook handler
-// webhookRegistry.register({
-//   topic: APP_UNINSTALLED,
-//   address: '/api/webhooks',
-//   onReceived: async (ctx) => {
-//     const { shop } = ctx.state.webhook.payload;
-//     await AppInstallations.delete(shop);
-//     ctx.status = 200;
-//   },
-// });
-
-// shopify.api.webhooks.addHandlers("APP_UNINSTALLED",
 // If you are adding routes outside of the /api path, remember to
 // also add a proxy rule for them in web/frontend/vite.config.js
 
@@ -128,8 +106,6 @@ app.get("/api/customers", async (req, res) => {
  * Date: 19/05/2023
  * Aman Solanki
  */
-
-// Get All Customers Date: 19/04/2023 &  21/04/2023 by Aman Solanki
 app.get("/api/bulk-update-customers", async (req, res) => {
   let error = null;
   let session = res.locals.shopify.session;
@@ -165,20 +141,13 @@ app.get("/api/search-customers", async (req, res) => {
  * Date: 19/05/2023
  * Aman Solanki
  */
-// Get Customers for Next Page
 app.get("/api/next-customers", async (req, res) => {
   let error = null;
-
-  // console.log("Request =>", req.query);
   let first = req.query.first;
   let after = req.query.after;
   let session = res.locals.shopify.session;
-  // const customers = await fetchNextCutomers({ session, first, after });
-
   try {
     const customers = await fetchNextCutomers({ session, first, after });
-
-    // const customers = await fetchCutomers(res.locals.shopify.session);
     res.status(200).send({ customers });
   } catch (e) {
     console.log(`Failed to get customers: ${e.message}`);
@@ -190,7 +159,6 @@ app.get("/api/next-customers", async (req, res) => {
 // Get Customers for Next Page
 app.get("/api/privious-customers", async (req, res) => {
   let error = null;
-
   let last = req.query.last;
   let before = req.query.before;
   let session = res.locals.shopify.session;
@@ -204,7 +172,6 @@ app.get("/api/privious-customers", async (req, res) => {
   }
 });
 
-// Filter Customer Data
 /**
  * Filter Customer Data
  * Date: 22/05/2023
@@ -244,8 +211,8 @@ app.get("/api/orders", async (req, res) => {
 
 /**
  * Fetch Customer Order By Id
+ * Fetch Customer  Order By Id created By Aman Solanki on Date: 1/05/2023
  */
-// Fetch Customer  Order By Id created By Aman Solanki on Date: 1/05/2023
 app.get("/api/order/:id", async (req, res) => {
   let error = null;
   let session = res.locals.shopify.session;
@@ -260,9 +227,6 @@ app.get("/api/order/:id", async (req, res) => {
   }
 });
 
-/**
- * 
- */
 
  // Fetch Order Data Date: 28/04/2023
  app.get("/api/orders/:id", async (req, res) => {
@@ -271,8 +235,6 @@ app.get("/api/order/:id", async (req, res) => {
   let session = res.locals.shopify.session;
   let customerId = req.params.id;
   try {
-    // const orders = await ({ session, customerId });
-
     const orders = await getAllOrdersByCustomer({ session, customerId });
   res.status(200).send({ orders });
   } catch (e) {
@@ -300,8 +262,6 @@ app.get("/api/order/:id", async (req, res) => {
   let country = req.query.country;
   let zip = req.query.zip;
 
- 
-
   try {
     const orders = await updateOrder({
       session,
@@ -316,9 +276,7 @@ app.get("/api/order/:id", async (req, res) => {
       phone,
       province,
     });
-    // console.log({orders});
-    // res.status(200).send({ orders });
-  
+
     if (orders == undefined) {
       res.status(429).send({ orders });
     } else {
@@ -340,9 +298,6 @@ app.get("/api/order/:id", async (req, res) => {
 
     try {
       const country = await getCountryList(session);
-      // console.log({orders});
-      // res.status(200).send({ orders });
-  
       res.status(200).send({ country });
     } catch (e) {
       console.log(`Failed to get customers: ${e.message}`);
@@ -353,10 +308,10 @@ app.get("/api/order/:id", async (req, res) => {
 
 
 
+// This is for Product List
 app.get("/api/products/prooduct-list", async (_req, res) => {
   let status = 200;
   let error = null;
-
   try {
     const products = await fetchProducts(res.locals.shopify.session);
     res.status(status).send({ products });
@@ -366,7 +321,6 @@ app.get("/api/products/prooduct-list", async (_req, res) => {
     error = e.message;
     res.status(status).send({ error });
   }
-  // res.status(status).send({ success: status === 200, error });
 });
 
 app.use(shopify.cspHeaders());

@@ -37,11 +37,7 @@ const FETCH_PRODUCTS_QUERY = `{
 
 const formalGqlResponse = (res) => {
   const edges = res?.body?.data?.products?.edges || [];
-// console.log("sdsd",res?.body?.data);
-  // console.log("SjSHfj", edges);
-  
   if (!edges.length) return [];
-
   return edges.map(({ node }) => ({
     id: node.id,
     legacyId: node.legacyResourceId,
@@ -73,7 +69,6 @@ export default async function fetchProducts(session) {
       },
     });
 
-    // console.log("Extensions:" , res.body.extensions);
     return formalGqlResponse(res);
   } catch (error) {
     if (error instanceof GraphqlQueryError) {
@@ -87,7 +82,6 @@ export default async function fetchProducts(session) {
 }
 
 // For Filtering Product Data
-
 const filterProductResponse = (res) => {
   const edges = res?.body?.data?.products?.edges || [];
   return {

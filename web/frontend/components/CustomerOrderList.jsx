@@ -62,7 +62,6 @@ export default function CustomerOrder({ customerId }) {
   const getOrders = async () => {
     const response = await fetch(`/api/orders/${customerId}`);
     const customers_order = await response.json();
-    console.log({ customers_order });
     if (response.ok) {
       setCustomer(customers_order.orders.customer);
       setOrders(customers_order.orders.customer.orders.edges);
@@ -82,13 +81,9 @@ export default function CustomerOrder({ customerId }) {
       resourceIDResolver,
     });
   /* Function for update Customers data */
-
   function onDelete(items) {
     handleSelectionChange("all", false);
   }
-
-  console.log({orders});
-
 
   const rowMarkup = orders.map(({ node }, index) => (
     <IndexTable.Row
@@ -169,7 +164,6 @@ export default function CustomerOrder({ customerId }) {
     <LegacyCard>
       <Frame>
         {toastMarkup}
-        {/* {mainIndex} */}
         {orders.length > 0 ?
           mainIndex : ( <Skeleton /> )
         }

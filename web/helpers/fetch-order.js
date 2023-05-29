@@ -49,7 +49,6 @@ const FETCH_ORDER_QUERY = `{
         }
 }`;
 const fetchOrderResponse = (res) => {
-  console.log("Customers...", res?.body?.data.orders);
   const edges = res?.body?.data?.orders?.edges || [];
   return {
     orders: edges,
@@ -59,7 +58,6 @@ const fetchOrderResponse = (res) => {
 
 export default async function fetchOrders(session) {
   const client = new shopify.api.clients.Graphql({ session });
-
   try {
     const res = await client.query({
       data: {
@@ -78,7 +76,7 @@ export default async function fetchOrders(session) {
   }
 }
 
-// // Function for filter the data by Tags
+// Function for filter the data by Tags
 const fetchCustomerOrder = (res) => {
   const edges = res?.body?.data?.customers?.edges || [];
   return {
@@ -94,7 +92,6 @@ export async function getAllOrdersByCustomer({ session, customerId }) {
   const accessToken = session.accessToken;
   const custId = `gid://shopify/Customer/${customerId}`;
   const client = new shopify.api.clients.Graphql({ session });
-
   const FETCH_CUSTOMERS_ORDER_QUERY = `
   {
       customer(id: \"${custId}\") {
@@ -194,7 +191,6 @@ export async function getAllOrdersByCustomer({ session, customerId }) {
 
 const fetchOrderByIdResponse = (res) => {
   const edges = res?.body?.data;
-  // console.log("Edges", res?.body?.data.order.lineItems.edges);
   return {
     order: edges.order,
     lineItems: edges.order.lineItems,
@@ -202,9 +198,7 @@ const fetchOrderByIdResponse = (res) => {
 };
 export async function getOrderById({ session, orderId }) {
   const client = new shopify.api.clients.Graphql({ session });
-
   const custId = `gid://shopify/Order/${orderId}`;
-
   const FETCH_ORDER_BY_ID_QUERY = `{
     order(id: \"${custId}\") {
                 id
@@ -334,11 +328,6 @@ export async function getOrderById({ session, orderId }) {
 
 // // For Update orders
 
-// const fetchUpdatedOrderResponse = (res) => {
-//   console.log("fetchUpdatedOrderResponse =>", res);
-
-// };
-
 async function makeApiRequest(credConfig) {
   try {
     const res = await axios.request(credConfig);
@@ -346,10 +335,9 @@ async function makeApiRequest(credConfig) {
     if (res.status === 429) {
       // Sleep for the amount of time specified in the Retry-After header
       const retryAfter = parseInt(res.headers["retry-after"], 2) || 2;
-      // console.log("Rate ====>",retryAfter);
       await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000));
       // Retry the request
-      // return makeApiRequest(credConfig);
+      return makeApiRequest(credConfig);
     }
 
     const order = {
@@ -363,8 +351,6 @@ async function makeApiRequest(credConfig) {
   } catch (error) {
     // console.error("Error ===>", error);
     // return {error};
-    // const order = {error}
-    // return {order};
   }
 }
 
@@ -383,10 +369,7 @@ export async function updateOrder({
 }) {
   const shop = session.shop;
   const accessToken = session.accessToken;
-
-  console.log({phone});
   const cleanedNumber = phone.replace(/\D/g, '');
-  console.log({cleanedNumber});
   let credential = JSON.stringify({
     order: {
       id: orderId,
@@ -394,7 +377,6 @@ export async function updateOrder({
         first_name: firstName,
         address1: address,
         phone: "+" + cleanedNumber,
-        // phone: phone,
         city: city,
         zip: zip,
         province: province,
@@ -418,66 +400,6 @@ export async function updateOrder({
   };
   return makeApiRequest(credConfig);
 }
-
-// /* Update Customer Billing Address */
-
-// const fetchUpdatedCustomerBillingAddress = (res) => {
-//   console.log("Response Data =>", res.data.order);
-//   const order = {
-//     id: res.data.order.id,
-//     admin_graphql_api_id: res.data.order.admin_graphql_api_id,
-//     app_id: res.data.order.app_id,
-//     billing_address: res.data.order.billing_address,
-//     shipping_address: res.data.order.shipping_address,
-//   };
-//   return { order };
-// };
-
-// export async function updateCustomerBillingAddress({
-//   session,
-//   orderId,
-//   firstName,
-//   lastName,
-//   address,
-//   addressTwo,
-//   city,
-//   company,
-//   zip,
-//   phone,
-//   province,
-// }) {
-//   const shop = session.shop;
-//   const accessToken = session.accessToken;
-//   let credential = JSON.stringify({
-//     order: {
-//       id: orderId,
-//       billing_address: {
-//         first_name: firstName,
-//         address1: address,
-//         phone: "+" + phone,
-//         city: city,
-//         zip: zip,
-//         province: province,
-//         last_name: lastName,
-//         address2: addressTwo,
-//         company: company,
-//       },
-//     },
-//   });
-
-//   let credConfig = {
-//     method: "put",
-//     maxBodyLength: Infinity,
-//     url: `https://${shop}/admin/api/2022-10/orders/${orderId}.json`,
-//     headers: {
-//       "X-Shopify-Access-Token": accessToken,
-//       "Content-Type": "application/json",
-//     },
-//     data: credential,
-//   };
-
-//   const res = await axios.request(credConfig);
-// }
 
 // /* Get Country list and its Province */
 

@@ -24,7 +24,6 @@ export default async function updateCustomers({ session, newCustID }) {
             },
           };
           const customer_response = await axios.request(getCustomerConfig);
-          // console.log({customer_response});
           if (customer_response.data.customer.tax_exempt === true) {
             let credential = JSON.stringify({
               customer: {
