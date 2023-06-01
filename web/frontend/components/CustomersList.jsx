@@ -23,6 +23,7 @@ import {
 import { SearchMajor } from "@shopify/polaris-icons";
 import { Redirect } from "@shopify/app-bridge/actions";
 
+
 import React, { useState, useEffect, useCallback } from "react";
 import { debounce } from "lodash"; // or any other debounce library
 import { useNavigate, Context } from "@shopify/app-bridge-react";
@@ -58,6 +59,8 @@ export function CustomersList({ toggleActive }) {
       },
     },
   });
+
+
 
   const [updatedCustorData, setUpdatedCustomerData] = useState([]);
   /**
@@ -670,7 +673,7 @@ export function CustomersList({ toggleActive }) {
                 console.log("Previous");
                 fetchPreviousCustomersRecords({
                   variables: {
-                    last: 50,
+                    last: 20,
                     before: pageInfo.startCursor,
                   },
                 });
@@ -680,7 +683,7 @@ export function CustomersList({ toggleActive }) {
                 console.log("Next");
                 fetchNextCustomersRecords({
                   variables: {
-                    first: 50,
+                    first: 20,
                     after: pageInfo.endCursor,
                   },
                 });
@@ -695,7 +698,7 @@ export function CustomersList({ toggleActive }) {
                 console.log("Previous");
                 fetchPreviousCustomersRecords({
                   variables: {
-                    last: 50,
+                    last: 20,
                     before: pageInfo.startCursor,
                   },
                 });
@@ -705,7 +708,7 @@ export function CustomersList({ toggleActive }) {
                 console.log("Next");
                 fetchNextCustomersRecords({
                   variables: {
-                    first: 50,
+                    first: 20,
                     after: pageInfo.endCursor,
                   },
                 });

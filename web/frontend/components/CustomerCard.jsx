@@ -41,13 +41,14 @@ export function CustomersCard() {
   useEffect(() => {
     if (data) {
       setIsLoadingCount(false);
-      const array = data.customers.order;
-      let total = 0;
-      for (let i = 0; i < array.length; i++) {
-        total = total + array[i].order;
-      }
-      setCustomerCount(data.customers.customers.length);
-      setOrderCount(total);
+      console.log({data});
+      // const array = data.customers.order;
+      // let total = 0;
+      // for (let i = 0; i < array.length; i++) {
+      //   total = total + array[i].order;
+      // }
+      setCustomerCount(data.customers.count);
+      // setOrderCount(total);
     }
   }, [data]);
 
@@ -116,7 +117,8 @@ export function CustomersCard() {
                         size="small"
                       />
                     ) : (
-                      orderCount
+                      // orderCount
+                      12
                     )}
                   </TextStyle>
                 </DisplayText>
