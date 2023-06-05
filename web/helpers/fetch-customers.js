@@ -12,17 +12,30 @@ dotenv.config();
  */
 export async function fetchCustomersCount(session) {
   const client = new shopify.api.clients.Graphql({ session });
+  const accessToken = client.session.accessToken;
+  const shop = client.session.shop;
   try {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `https://${process.env.STORE_URL}/count.json`,
+      url: `https://${shop}/admin/api/2023-04/customers/count.json`,
       headers: {
-        "X-Shopify-Access-Token": process.env.ACCESS_TOKEN
+        "X-Shopify-Access-Token": accessToken
       },
     };
+
+    let orderConfig = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `https://${shop}/admin/api/2023-04/orders/count.json?status=any`,
+      headers: {
+        "X-Shopify-Access-Token": accessToken
+      },
+    };
+
     const res = await axios.request(config);
-    return res.data;
+    const orderRes = await axios.request(orderConfig);
+    return { customerCount: res.data, orderCount: orderRes.data}
   } catch (error) {
     if (error instanceof GraphqlQueryError) {
       throw new Error(

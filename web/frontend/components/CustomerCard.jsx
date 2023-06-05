@@ -47,8 +47,8 @@ export function CustomersCard() {
       // for (let i = 0; i < array.length; i++) {
       //   total = total + array[i].order;
       // }
-      setCustomerCount(data.customers.count);
-      // setOrderCount(total);
+      setCustomerCount(data.customers.customerCount.count);
+      setOrderCount(data.customers.orderCount.count)
     }
   }, [data]);
 
@@ -117,8 +117,8 @@ export function CustomersCard() {
                         size="small"
                       />
                     ) : (
-                      // orderCount
-                      12
+                      orderCount
+                      // 12
                     )}
                   </TextStyle>
                 </DisplayText>

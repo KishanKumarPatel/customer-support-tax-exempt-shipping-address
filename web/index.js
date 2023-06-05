@@ -3,13 +3,9 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import express from "express";
 import serveStatic from "serve-static";
-
+import dotenv from 'dotenv';
 import shopify from "./shopify.js";
-// import { WebhookRegistry, APP_UNINSTALLED } from '@shopify/koa-shopify-webhooks';
-import { AppInstallations } from "./app_installations.js";
-import productCreator from "./product-creator.js";
 import GDPRWebhookHandlers from "./gdpr.js";
-import fetchProducts from "./product-list.js";
 import {
   fetchCustomersCount,
   fetchCutomers,
@@ -25,6 +21,7 @@ const PORT = parseInt(
   10
 );
 
+dotenv.config();
 const STATIC_PATH =
   process.env.NODE_ENV === "production"
     ? `${process.cwd()}/frontend/dist`
@@ -51,26 +48,6 @@ app.use("/api/*", shopify.validateAuthenticatedSession());
 
 app.use(express.json());
 
-app.get("/api/products/count", async (_req, res) => {
-  const countData = await shopify.api.rest.Product.count({
-    session: res.locals.shopify.session,
-  });
-  res.status(200).send(countData);
-});
-
-app.get("/api/products/create", async (_req, res) => {
-  let status = 200;
-  let error = null;
-
-  try {
-    await productCreator(res.locals.shopify.session);
-  } catch (e) {
-    console.log(`Failed to process products/create: ${e.message}`);
-    status = 500;
-    error = e.message;
-  }
-  res.status(status).send({ success: status === 200, error });
-});
 
 // Get Customers list
 app.get("/api/customers-count", async (_req, res) => {
@@ -308,20 +285,7 @@ app.get("/api/order/:id", async (req, res) => {
 
 
 
-// This is for Product List
-app.get("/api/products/prooduct-list", async (_req, res) => {
-  let status = 200;
-  let error = null;
-  try {
-    const products = await fetchProducts(res.locals.shopify.session);
-    res.status(status).send({ products });
-  } catch (e) {
-    console.log(`Failed to get products: ${e.message}`);
-    status = 500;
-    error = e.message;
-    res.status(status).send({ error });
-  }
-});
+
 
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));
