@@ -25,7 +25,7 @@ import { Redirect } from "@shopify/app-bridge/actions";
 
 
 import React, { useState, useEffect, useCallback } from "react";
-import { debounce } from "lodash"; // or any other debounce library
+// import { debounce } from "lodash"; // or any other debounce library
 import { useNavigate, Context } from "@shopify/app-bridge-react";
 import { useAppQuery, useAuthenticatedFetch } from "../hooks";
 import CustomersNotFound from "../pages/CustomerNotFound";
@@ -404,9 +404,9 @@ export function CustomersList({ toggleActive }) {
 
   // Define the debounce delay (in milliseconds)
   const debounceDelay = 300;
-  const debouncedSearch = () => {
-    debounce(searchData, 100);
-  };
+  // const debouncedSearch = () => {
+  //   debounce(searchData, 100);
+  // };
 
   const [nextCustomer, setNextCustomer] = useState([]);
   const [updatedPageInfo, setUpdatedPageInfo] = useState([]);
